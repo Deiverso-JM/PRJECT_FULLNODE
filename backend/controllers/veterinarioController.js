@@ -1,10 +1,13 @@
 import generarId from "../helpers/generarID.js";
 import Veterinario from "../models/Veterinaria.js"
 import generarJWT from "../helpers/generarJWT.js";
+import emailRegistro from "../helpers/emailRegistro.js";
+import olvideEmail from "../helpers/emailOlvidePassword.js";
+
 
 
 const registrar = async (req,res) =>{
-    const {email} = req.body
+    const {email, nombre} = req.body
     
     //Prevenir usuarios duplicados
     const existeUsuario = await Veterinario.findOne({email})
@@ -17,6 +20,15 @@ const registrar = async (req,res) =>{
         //Guardar Nuevo Veterinario
         const veterinario = new Veterinario(req.body)
         const veterinarioGuardado = await veterinario.save()
+
+        //Enviar Email
+
+        emailRegistro({
+            email,
+            nombre,
+            token: veterinarioGuardado.token
+        })
+
         
         res.json(veterinarioGuardado)
     } catch (error) {
@@ -58,7 +70,6 @@ const confirmar = async (req, res) =>{
     const {token} = req.params
     const usuarioConfirmar = await Veterinario.findOne({token});
     if(!usuarioConfirmar){
-        console.log("AQUI")
         const error  = new Error('Token no valido');
         console.log(error)
         return res.status(404).json({msg: error.message})
@@ -95,6 +106,15 @@ const olvidePassword = async (req,res) =>{
     try {
         existVeterinario.token = generarId()
         await existVeterinario.save()
+
+        //Enviar Email con instucciones 
+        olvideEmail({
+            email,
+            nombre: existVeterinario.nombre,
+            token: existVeterinario.token
+        })
+
+
         res.json({msg: "Hemos enviado un email con las instrucciones"})
     } catch (error) {
         console.log(error)
