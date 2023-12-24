@@ -5,7 +5,7 @@ import clienteAxios from '../config/axios.js'
 
 
 function OlvidePassword() {
-  const [email, setEmail] = useState()
+  const [email, setEmail] = useState('')
   const [alerta, setAlerta] = useState({})
   const handelSubmit = async  (e) =>{
     e.preventDefault()
