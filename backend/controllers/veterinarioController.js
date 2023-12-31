@@ -55,7 +55,12 @@ const autenticar =  async (req,res) =>{
 
     if(await usuario.comprobarPassword(password)){
         //Autenticar
-        res.json({token: generarJWT(usuario.id)})
+        res.json({
+            _id: usuario._id,
+            nombre: usuario.nombre,
+            email: usuario.email,
+            token: generarJWT(usuario.id)
+        })
 
     }else{
         const error = new Error("password Incorrecto")
@@ -71,7 +76,6 @@ const confirmar = async (req, res) =>{
     const usuarioConfirmar = await Veterinario.findOne({token});
     if(!usuarioConfirmar){
         const error  = new Error('Token no valido');
-        console.log(error)
         return res.status(404).json({msg: error.message})
     }
 
@@ -87,9 +91,8 @@ const confirmar = async (req, res) =>{
 }
 
 const perfil = (req,res)=>{
-    const {veterinario} = req.veterinario
-
-    return res.status(400).json({ msg: "PERFIL" });
+    const {veterinario} = req;
+    return res.json(veterinario);
     
 
 }
@@ -122,17 +125,24 @@ const olvidePassword = async (req,res) =>{
 
     return res.status(400).json({ msg: "Contraseña" });
 }
+
+
 const comprobarToken = async (req,res) =>{
    const {token} = req.params
    const tokenValido = await Veterinario.findOne({token})
+
    if(tokenValido){
     //El usuario existe
     res.json({msg: "Token valido y existe"})
    }else{
     const error = new Error('Token No valido')
-    return res.json({msg: error.message})   
+    return res.status(400).json({msg: error.message})   
    }
+
 }
+
+
+
 const nuevoPassword = async (req,res) =>{
    const {token} = req.params
    const {password} = req.body

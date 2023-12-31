@@ -22,7 +22,7 @@ const olvideEmail = async (datos) =>{
         text: 'Restablecimiento de password',
         html: `<p>Hola: ${nombre}, Para restrablecer  tu cuenta en APV</p>
             <p>Solo debes comprobarla en el siguiente enlace:
-            <a href="${process.env.FRONTEND_URL}/veterinarios/olvide-password/${token}">Comprobar Cuenta <a/> </p>
+            <a href="${process.env.FRONTEND_URL}/olvide-password/${token}">Comprobar Cuenta <a/> </p>
             <p>Si tu no creaste esta cuenta, puedes ignorar este mensaje</p>
         `
     })

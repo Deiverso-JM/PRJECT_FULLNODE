@@ -5,7 +5,7 @@ import checkAuth from "../middleware/authMiddleware.js";
 
 router.route('/')
     .post(checkAuth,agregarPacientes)
-    .get(obtnerPacientes)
+    .get(checkAuth,obtnerPacientes)
 
 router
     .route('/:id')
