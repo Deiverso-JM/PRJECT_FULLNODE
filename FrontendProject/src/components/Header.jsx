@@ -12,7 +12,7 @@ function Header() {
 
             <nav className="flex gap-4 mt-6">
                 <Link to="/admin" className="text-white text-sm font-bold hover:text-gray-200  uppercase">Pacientes</Link>
-                <Link to="/perfil" className="text-white text-sm font-bold hover:text-gray-200  uppercase">Perfil</Link>
+                <Link to="/admin/perfil" className="text-white text-sm font-bold hover:text-gray-200  uppercase">Perfil</Link>
 
                 <button
                     type="button"

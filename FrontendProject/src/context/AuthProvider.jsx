@@ -5,20 +5,20 @@ import clienteAxios from "../config/axios";
 
 const AuthContext = createContext()
 // eslint-disable-next-line react/prop-types
-const AuthProvider = ({children}) =>{
+const AuthProvider = ({ children }) => {
 
 
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const [auth, setAuth] = useState({})
     const [cargando, setCargando] = useState(true)
-    
 
-    useEffect(() =>{
-        const autenticarUsuario = async () =>{
+
+    useEffect(() => {
+        const autenticarUsuario = async () => {
             const token = localStorage.getItem('token')
 
-            if(!token){
+            if (!token) {
                 setCargando(false)
                 return
             }
@@ -31,8 +31,8 @@ const AuthProvider = ({children}) =>{
             }
 
             try {
-                const {data} = await clienteAxios('/veterinarios/perfil', config)
-                
+                const { data } = await clienteAxios('/veterinarios/perfil', config)
+
                 setAuth(data)
             } catch (error) {
                 console.log(error.response.data.msg)
@@ -46,9 +46,41 @@ const AuthProvider = ({children}) =>{
     }, [])
 
 
-    const cerraSesion = () =>{
+    const cerraSesion = () => {
         localStorage.removeItem('token')
         setAuth({})
+    }
+
+    const actualizarPerfil = async (datos) => {
+        const token = localStorage.getItem('token')
+
+        if (!token) {
+            setCargando(false)
+            return
+        }
+
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        }
+
+        try {
+            const url = `/veterinarios/perfil/${datos._id}`
+            // eslint-disable-next-line no-unused-vars
+            const { data } = await clienteAxios.put(url, datos, config)
+            
+            return{
+                msg: 'Almacenado correctamente',
+                error: false
+            }
+        } catch (error) {
+            return{
+                msg: error.response.data.msg,
+                error: true
+            }
+        }
     }
 
     return (
@@ -57,7 +89,8 @@ const AuthProvider = ({children}) =>{
                 auth,
                 setAuth,
                 cargando,
-                cerraSesion
+                cerraSesion,
+                actualizarPerfil
             }}>
             {children}
         </AuthContext.Provider>
@@ -65,7 +98,7 @@ const AuthProvider = ({children}) =>{
 }
 
 
-export{
+export {
     AuthProvider,
 
 }

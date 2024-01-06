@@ -13,9 +13,12 @@ import OlvidePassword from "./paginas/olvide-password"
 import NewPassword from "./paginas/NewPassword"
 
 
+
 //PRIVATE
 import RutaProtegida from "./layout/RutaProtegida"
 import AdministrarPacientes from "./paginas/AdministrarPacientes"
+import CambiarPassword from "./paginas/CambiarPassword"
+import EditarPerfil from "./paginas/EditarPerfil"
 
 
 
@@ -37,6 +40,9 @@ function App() {
 
             <Route path="/admin" element={<RutaProtegida />}>
               <Route index element={<AdministrarPacientes />} />
+              <Route path="cambiar-password" element={<CambiarPassword />} />
+              <Route  path="perfil" element={<EditarPerfil />} />
+
             </Route>
 
           </Routes>
