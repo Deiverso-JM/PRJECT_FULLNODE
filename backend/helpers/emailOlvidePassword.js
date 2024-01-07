@@ -13,7 +13,6 @@ const olvideEmail = async (datos) =>{
     const {email,nombre, token}  = datos
 
     //ENVIAR EMAIl
-    console.log('POR AQUI')
 
     const info = await transporter.sendMail({
         from: "APV - Administrador de pacientes de Veterinaria",

@@ -132,19 +132,24 @@ const comprobarToken = async (req, res) => {
 };
 
 const nuevoPassword = async (req, res) => {
+    const {token} = req.params
+    console.log(req.body)
     const veterinario = await Veterinario.findOne({ token });
-
+    console.log(veterinario)
     if (!veterinario) {
         const error = new Error("Usuario no existe");
         return res.json({ msg: error.message });
     }
 
+
+    //Actualizacion
     try {
         veterinario.token = null;
-        veterinario.password = password;
+        veterinario.password = req.body.password;
         await veterinario.save();
         res.json({ msg: "Nuevo password Guardado" });
     } catch (error) {
+        console.log('AQUIIIIi')
         console.log(error);
     }
 };
@@ -183,6 +188,32 @@ const actualizarPerfil = async (req, res) => {
     }
 };
 
+const actualizarPassword = async (req,res) =>{
+    //Obtener datos
+
+    const {id} = req.veterinario
+    const {pwd_actual, pwd_nueva} = req.body
+
+    //Comprobar si existe el veterinario
+
+    const veterinario = await Veterinario.findById(id);
+    console.log(veterinario)
+
+    if(await veterinario.comprobarPassword(pwd_actual)){
+        
+        //Almacenar Nuevo Password
+        veterinario.password = pwd_nueva;
+        await veterinario.save()
+        res.json({msg: 'Password Almacenado correctamente'})
+    }else{
+        console.log('correcto2')
+        const error = new Error("La contraseña actual incorrecto");
+        return res.status(400).json({ msg: error.message });
+    }
+
+
+}
+
 export {
     registrar,
     autenticar,
@@ -192,4 +223,5 @@ export {
     comprobarToken,
     nuevoPassword,
     actualizarPerfil,
+    actualizarPassword
 };

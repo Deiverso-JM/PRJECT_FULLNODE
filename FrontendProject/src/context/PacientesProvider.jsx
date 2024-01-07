@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import clienteAxios from "../config/axios.js";
-
+import useAuth from '../hooks/useAuth.jsx'
 const PacientesContext = createContext()
 
 // eslint-disable-next-line react/prop-types
@@ -8,7 +8,7 @@ const PacientesProvider = ({ children }) => {
 
     const [pacientes, setPacientes] = useState([])
     const [paciente, setPaciente] = useState({})
-
+    const {auth} = useAuth()
     useEffect(() => {
         const obtenerPacientes = async () => {
             try {
@@ -30,7 +30,7 @@ const PacientesProvider = ({ children }) => {
         }
 
         obtenerPacientes()
-    }, [])
+    }, [auth])
 
 
 
